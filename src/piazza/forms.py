@@ -1,9 +1,9 @@
+from django.conf import settings
 from django import forms
-
-
 from .models import Tweet
 
-MAX_TWEET_LENGTH = 240
+MAX_TWEET_LENGTH = settings.MAX_TWEET_LENGTH
+#MAX_TWEET_LENGTH = 240 # instead of declaring this every time we have it in django settings and used every where as above
 
 class TweetForm(forms.ModelForm):
     #can also declare individuals fields like below

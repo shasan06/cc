@@ -6,10 +6,12 @@ User = settings.AUTH_USER_MODEL
 # Create your models here.
 class Tweet(models.Model):
     #id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE) #many users can many tweets
+    user = models.ForeignKey(User, on_delete=models.CASCADE) #many users can many tweets(assigning each tweet to a user)
     message = models.TextField(blank=True, null=True)
     image   = models.FileField(upload_to='images/', blank=True, null=True)
     
+    #def __str__(self):string rep of the actual obj itself
+    #   return self.message
 
     class Meta:
         ordering = ['-id']

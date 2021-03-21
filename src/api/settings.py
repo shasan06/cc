@@ -27,7 +27,8 @@ SECRET_KEY = '$!h_-crs^$z%!mrg@ghl0s7*jv!z_+qi_q7%u^cg#n%l24v7qm'
 DEBUG = True
 
 ALLOWED_HOSTS = ['10.61.64.41']
-
+LOGIN_URL = "/login"
+MAX_TWEET_LENGTH = 240
 
 # Application definition
 
@@ -39,8 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'oauth2_provider', # The OAuth2
+    #third-party
     'rest_framework', # The REST API
     'users',
+    #internal
     'piazza',
 
 ]
