@@ -11,7 +11,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .forms import TweetForm
 from .models import Tweet #Here Piazza is a Tweet which is a class in models
-from .serializers import TweetSerializer, TweetActionSerializer
+from .serializers import (
+    TweetSerializer, 
+    TweetActionSerializer,
+    TweetCreateSerializer
+)
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 # Create your views here.
@@ -26,7 +30,7 @@ def home_view(request, *args, **kwargs):
 @permission_classes([IsAuthenticated])#REST API Course
 def tweet_create_view(request, *args, **kwargs):
     #date = request.POST or None
-    serializer = TweetSerializer(data=request.POST)
+    serializer = TweetCreateSerializer(data=request.POST)
     #serializer = TweetSerializer(data=request.POST or None)
     if serializer.is_valid(raise_exception=True):
        serializer.save(user=request.user)
@@ -74,21 +78,25 @@ def tweet_action_view(request, *args, **kwargs):
         data = serializer.validated_data
         tweet_id = data.get("id")
         action = data.get("action")
-
+        message = data.get("message")
         qs = Tweet.objects.filter(id=tweet_id)
         if not qs.exists():
             return Response({}, status=404)
         obj = qs.first()
-        if action == "like":
+        if action == "likes":
             obj.likes.add(request.user)
             serializer = TweetSerializer(obj)
             return Response(serializer.data, status=200)
-        elif action == "unlike":
+        elif action == "dislikes":#unlike
             obj.likes.remove(request.user)
-        elif action == "retweet":
-            # this is todo
-            pass
-            
+        elif action == "comments":#retweet
+            new_tweet = Tweet.objects.create(
+                    user=request.user, 
+                    parent=obj,
+                    message=message,
+                    )
+            serializer = TweetSerializer(new_tweet)
+            return Response(serializer.data, status=200)
     return Response({}, status=200)
 
 '''def tweet_like_toggle_view(request, tweet_id,  *args, **kwargs):
