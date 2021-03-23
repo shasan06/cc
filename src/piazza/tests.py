@@ -7,13 +7,15 @@ from .models import Tweet
 # Create your tests here.
 User = get_user_model()
 
-class TweetTestCase(TestCase):#Inherit test case
+class TweetTestCase(TestCase):#Inherit test case, use the setup method to put the stuff in db
     def setUp(self):
         #User.objects.create_user(username='abc', password='somepassword')
         self.user = User.objects.create_user(username='cfe', password='somepassword')
+        self.userb = User.objects.create_user(username='cfe-2', password='somepassword2')
         Tweet.objects.create(message="my first tweet", user=self.user)
         Tweet.objects.create(message="my first tweet", user=self.user)
-        Tweet.objects.create(message="my first tweet", user=self.user)
+        Tweet.objects.create(message="my first tweet", user=self.userb)#new user created of id =3 as it is the 3rd user
+        self.currentCount = Tweet.objects.all().count()
 
 
     def test_tweet_created(self):
@@ -72,6 +74,43 @@ class TweetTestCase(TestCase):#Inherit test case
     #for comments/retweeting
     def test_action_comment(self):
         client = self.get_client()
+        #currentCount = self.currentCount
         response = client.post("/api/piazza/action/", 
             {"id": 2, "action": "comments"})
         self.assertEqual(response.status_code, 201)
+        data = response.json()
+        new_tweet_id = data.get("id")
+        self.assertNotEqual(2, new_tweet_id)
+        self.assertEqual(self.currentCount + 1, new_tweet_id)#bcoz retweet/coment something should create a new count
+
+    #testing the create
+    def test_tweet_create_api_view(self):
+        request_data = {"message": "This is my test tweet"}
+        client = self.get_client()
+        response = client.post("/api/piazza/create/", request_data)
+        self.assertEqual(response.status_code, 201)
+        response_data = response.json()
+        new_tweet_id = response_data.get("id")
+        #self.assertNotEqual(2, new_tweet_id)
+        self.assertEqual(self.currentCount + 1, new_tweet_id)
+
+    def test_tweet_detail_api_view(self):
+        #request_data = {"message": "This is my test tweet"}
+        client = self.get_client()
+        response = client.get("/api/piazza/1/")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        _id = data.get("id")
+        self.assertEqual(_id, 1)
+
+    def test_tweet_delete_api_view(self):
+        #request_data = {"message": "This is my test tweet"}
+        client = self.get_client()
+        response = client.delete("/api/piazza/1/delete/")
+        self.assertEqual(response.status_code, 200)
+        client = self.get_client()
+        response = client.delete("/api/piazza/1/delete/")
+        self.assertEqual(response.status_code, 404)
+        response_incorrect_owner = client.delete("/api/piazza/3/delete/")
+        self.assertEqual(response_incorrect_owner.status_code, 401)
+        
