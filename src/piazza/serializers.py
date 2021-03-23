@@ -17,10 +17,13 @@ class TweetActionSerializer(serializers.Serializer):
         return value
 
 class TweetSerializer(serializers.ModelSerializer):
+    likes = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Tweet
-        fields = ['message']
+        fields = ['id', 'message', 'likes']
     #the thing which is not the same is the clean and validate. the actual value that is being passed into that field
+    def get_likes(self, obj):
+        return obj.likes.count()
 
     def validate_content(self, value):# message to value and forms to serializers are changed
         if len(value) > MAX_TWEET_LENGTH: #max_.. is imported  now from settings django.conf
