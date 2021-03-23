@@ -33,8 +33,9 @@ urlpatterns = [
     path('create-tweet', tweet_create_view),
     path('piazza', tweet_list_view),
     path('piazza/<int:tweet_id>', tweet_detail_view),
-    path('api/piazza/action', tweet_action_view),
-    path('api/piazza/<int:tweet_id>/delete', tweet_delete_view),
+    #path('api/piazza/action', tweet_action_view),
+    #path('api/piazza/<int:tweet_id>/delete', tweet_delete_view),
+    path('api/piazza/', include('piazza.urls')),
 ]
 
 

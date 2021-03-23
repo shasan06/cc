@@ -70,7 +70,7 @@ def tweet_delete_view(request, tweet_id,  *args, **kwargs):
 def tweet_action_view(request, *args, **kwargs):
     '''
     id is required.
-    Action options are: like, unlike, retweet
+    Action options are: likes, disike, comments
     '''
     #print(request.POST, request.data)
     serializer = TweetActionSerializer(data=request.data)

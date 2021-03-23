@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['10.61.64.41']
 LOGIN_URL = "/login"
 MAX_TWEET_LENGTH = 240
-TWEET_ACTION_OPTIONS = ["like", "unlike", "retweet"]
+TWEET_ACTION_OPTIONS = ["likes", "dislikes", "comments"]
 
 # Application definition
 

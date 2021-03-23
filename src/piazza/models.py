@@ -26,7 +26,19 @@ class Tweet(models.Model):
     class Meta:
         ordering = ['-id']
 
+
+    @property
+    def is_comment(self):#comment==retweet
+        return self.parent != None #this will give a boolean value,
+        #if the parent is not equal to none then it is a cooment/retweet
+        #if the parent is equal to none then its not a comment/retweet
+    
     def serialize(self):
+        '''
+        Feel free to delete!
+        as it is an old way of serializing
+        '''
+        
         return{
             "id": self.id,
             "message": self.message,

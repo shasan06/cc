@@ -193,20 +193,20 @@ function handleTweetActionBtn(tweet_id, currentCount, action){
 //this is retweet/comment button
 function CommentBtn(tweet){
     return "<button class='btn btn-outline-success btn-sm' onclick=handleTweetActionBtn(" + 
-    tweet.id + ","+ tweet.likes + ",'comment')>Comments</button>"
+    tweet.id + ","+ tweet.likes + ",'comments')>Comments</button>"
 }
 
 //this is dislike/unlike button
 function DisLikeBtn(tweet){
     return "<button class='btn btn-outline-primary btn-sm' onclick=handleTweetActionBtn(" + 
-    tweet.id + ","+ tweet.likes + ",'dislike')> Dislikes</button>"
+    tweet.id + ","+ tweet.likes + ",'dislikes')> Dislikes</button>"
 }
 
 
 //this is a like button
 function LikeBtn(tweet){
     return "<button class='btn btn-primary btn-sm' onclick=handleTweetActionBtn(" + 
-    tweet.id + ","+ tweet.likes + ",'like')>" + tweet.likes + " Likes</button>"
+    tweet.id + ","+ tweet.likes + ",'likes')>" + tweet.likes + " Likes</button>"
 }
 
 function formatTweetElement(tweet) {
